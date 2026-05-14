@@ -1,12 +1,28 @@
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') });
 
 const app = express();
 const PORT = process.env.BACKEND_PORT || 4000;
 
-app.use(cors());
-app.use(express.json());
+// Security headers
+app.use(helmet({ contentSecurityPolicy: false }));
+
+// Env-driven CORS allowlist
+const corsOrigins = (process.env.CORS_ORIGINS || 'http://localhost:3000,http://localhost:5173')
+  .split(',')
+  .map(s => s.trim())
+  .filter(Boolean);
+app.use(cors({
+  origin: (origin, cb) => {
+    if (!origin) return cb(null, true);
+    if (corsOrigins.includes('*') || corsOrigins.includes(origin)) return cb(null, true);
+    return cb(new Error(`CORS blocked for origin: ${origin}`));
+  },
+  credentials: true,
+}));
+app.use(express.json({ limit: '1mb' }));
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
@@ -26,8 +42,26 @@ app.use('/api/pharmacogenomics', require('./routes/pharmacogenomics'));
 app.use('/api/guidelines', require('./routes/guidelines'));
 app.use('/api/audit', require('./routes/audit'));
 
+// Expanded AI endpoints
+const aiExpanded = require('./routes/aiExpanded');
+app.use('/api', aiExpanded);
+app.use('/api/drug-database-sync', require('./routes/drugDatabaseSync'));
+app.use('/api/agentic-pharmacist', require('./routes/agenticPharmacist'));
+app.use('/api/voice-intake', require('./routes/voiceIntake'));
+app.use('/api/pharmacy-integration', require('./routes/pharmacyIntegration'));
+app.use('/api/formulary-check', require('./routes/formularyCheck'));
+app.use('/api/population-health', require('./routes/populationHealth'));
+
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
+
+
+// === Batch 03 Gaps & Frontend Mounts ===
+try {
+  const _batch03 = require('../routes/batch03Gaps');
+  if (typeof authenticateToken === 'function') app.use('/api', authenticateToken, _batch03);
+  else app.use('/api', _batch03);
+} catch (_e) { /* batch03 gap routes optional */ }
 
 app.listen(PORT, () => {
   console.log(`Backend server running on port ${PORT}`);

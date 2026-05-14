@@ -4,11 +4,19 @@ const auth = require('../middleware/auth');
 const { queryOpenRouter } = require('../middleware/openrouter');
 const router = express.Router();
 
-// Get all drugs
+// Get all drugs (paginated)
 router.get('/', auth, async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM drugs ORDER BY name');
-    res.json(result.rows);
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 20));
+    const offset = (page - 1) * limit;
+
+    const countResult = await pool.query('SELECT COUNT(*) FROM drugs');
+    const total = parseInt(countResult.rows[0].count);
+    const totalPages = Math.ceil(total / limit);
+
+    const result = await pool.query('SELECT * FROM drugs ORDER BY name LIMIT $1 OFFSET $2', [limit, offset]);
+    res.json({ data: result.rows, pagination: { page, limit, total, totalPages } });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -29,6 +37,14 @@ router.get('/:id', auth, async (req, res) => {
 router.post('/', auth, async (req, res) => {
   try {
     const { name, generic_name, drug_class, category, manufacturer, fda_status, description, side_effects, contraindications } = req.body;
+
+    if (!name || typeof name !== 'string' || name.trim().length === 0) {
+      return res.status(400).json({ error: 'name is required' });
+    }
+    if (!drug_class || typeof drug_class !== 'string' || drug_class.trim().length === 0) {
+      return res.status(400).json({ error: 'drug_class is required' });
+    }
+
     const result = await pool.query(
       `INSERT INTO drugs (name, generic_name, drug_class, category, manufacturer, fda_status, description, side_effects, contraindications)
        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`,

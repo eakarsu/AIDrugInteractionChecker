@@ -2,6 +2,7 @@ const express = require('express');
 const pool = require('../db');
 const auth = require('../middleware/auth');
 const { queryOpenRouter } = require('../middleware/openrouter');
+const { aiRateLimiter } = require('../middleware/rateLimiter');
 const router = express.Router();
 
 router.get('/', auth, async (req, res) => {
@@ -69,7 +70,7 @@ router.delete('/:id', auth, async (req, res) => {
 });
 
 // AI: Pharmacogenomic analysis
-router.post('/ai-analyze', auth, async (req, res) => {
+router.post('/ai-analyze', auth, aiRateLimiter, async (req, res) => {
   try {
     const { drug_id, gene_results } = req.body;
     const drug = await pool.query('SELECT * FROM drugs WHERE id = $1', [drug_id]);
@@ -77,7 +78,13 @@ router.post('/ai-analyze', auth, async (req, res) => {
     const d = drug.rows[0];
     const prompt = `Provide pharmacogenomic analysis for ${d.name} (${d.generic_name}, class: ${d.drug_class}). Genetic test results: ${gene_results || 'CYP2D6 *1/*1 (Normal Metabolizer)'}. Include CPIC guidelines, dose adjustments based on genotype, and clinical action recommendations.`;
     const aiResult = await queryOpenRouter(prompt, 'You are a pharmacogenomics expert specializing in precision medicine and genotype-guided drug therapy.');
-    res.json({ drug: d, ai_analysis: aiResult.result });
+    const { parseAIJson } = require('../middleware/parseAIJson');
+    const parsedJson = parseAIJson(aiResult.result);
+    await pool.query(
+      `INSERT INTO audit_log (user_id, action, entity_type, entity_id, details, ai_results) VALUES ($1, $2, $3, $4, $5, $6)`,
+      [req.user.id, 'AI_PHARMACOGENOMICS_ANALYZE', 'drug', drug_id, JSON.stringify({ drug: d.name, gene_results: gene_results || null }), JSON.stringify({ raw: aiResult.result, parsed: parsedJson })]
+    );
+    res.json({ drug: d, ai_analysis: aiResult.result, ai_json: parsedJson });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -249,6 +249,7 @@ async function seed() {
       entity_type VARCHAR(100),
       entity_id INTEGER,
       details JSONB,
+      ai_results JSONB DEFAULT '{}'::jsonb,
       created_at TIMESTAMP DEFAULT NOW()
     );
   `);

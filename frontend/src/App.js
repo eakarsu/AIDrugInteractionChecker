@@ -17,7 +17,13 @@ import GeriatricPage from './pages/GeriatricPage';
 import PharmacogenomicsPage from './pages/PharmacogenomicsPage';
 import GuidelinesPage from './pages/GuidelinesPage';
 import AuditPage from './pages/AuditPage';
+import MultiInteractionPage from './pages/MultiInteractionPage';
+import GeriatricRiskPage from './pages/GeriatricRiskPage';
+import AuditAISummaryPage from './pages/AuditAISummaryPage';
+import ClinicalTrialMatchPage from './pages/ClinicalTrialMatchPage';
 import Layout from './components/Layout';
+
+import Batch03Features from './pages/Batch03Features';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -40,6 +46,7 @@ function App() {
     <Router>
       <Layout onLogout={handleLogout}>
         <Routes>
+          <Route path="/batch03" element={<Batch03Features />} />
           <Route path="/" element={<Dashboard />} />
           <Route path="/drugs" element={<DrugsPage />} />
           <Route path="/interactions" element={<InteractionsPage />} />
@@ -56,6 +63,10 @@ function App() {
           <Route path="/pharmacogenomics" element={<PharmacogenomicsPage />} />
           <Route path="/guidelines" element={<GuidelinesPage />} />
           <Route path="/audit" element={<AuditPage />} />
+          <Route path="/ai-multi-check" element={<MultiInteractionPage />} />
+          <Route path="/ai-geriatric-risk" element={<GeriatricRiskPage />} />
+          <Route path="/ai-audit-summary" element={<AuditAISummaryPage />} />
+          <Route path="/ai-clinical-trials" element={<ClinicalTrialMatchPage />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Layout>

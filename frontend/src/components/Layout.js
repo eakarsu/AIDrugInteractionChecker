@@ -18,6 +18,10 @@ const menuItems = [
   { path: '/pharmacogenomics', label: 'Pharmacogenomics', icon: '⬢' },
   { path: '/guidelines', label: 'Clinical Guidelines', icon: '▥' },
   { path: '/audit', label: 'Audit Log', icon: '▤' },
+  { path: '/ai-multi-check', label: 'AI Multi-Drug Check', icon: '⊕' },
+  { path: '/ai-geriatric-risk', label: 'AI Geriatric Risk', icon: '◈' },
+  { path: '/ai-audit-summary', label: 'AI Audit Summary', icon: '▦' },
+  { path: '/ai-clinical-trials', label: 'AI Clinical Trial Match', icon: '◇' },
 ];
 
 const Layout = ({ children, onLogout }) => {
