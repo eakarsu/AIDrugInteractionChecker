@@ -22,6 +22,7 @@ const menuItems = [
   { path: '/ai-geriatric-risk', label: 'AI Geriatric Risk', icon: '◈' },
   { path: '/ai-audit-summary', label: 'AI Audit Summary', icon: '▦' },
   { path: '/ai-clinical-trials', label: 'AI Clinical Trial Match', icon: '◇' },
+  { path: '/custom-views', label: 'Pharmacy Views', icon: '▼' },
 ];
 
 const Layout = ({ children, onLogout }) => {

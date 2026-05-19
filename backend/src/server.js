@@ -55,6 +55,14 @@ app.use('/api/population-health', require('./routes/populationHealth'));
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
 
+// === Custom Pharmacy Views (mounted BEFORE 404) ===
+try {
+  const _customViews = require('../routes/customViews');
+  app.use('/api/custom-views', _customViews);
+  console.log('[custom-views] mounted at /api/custom-views');
+} catch (e) {
+  console.warn('[custom-views] failed to mount:', e.message);
+}
 
 // === Batch 03 Gaps & Frontend Mounts ===
 try {

@@ -24,6 +24,7 @@ import ClinicalTrialMatchPage from './pages/ClinicalTrialMatchPage';
 import Layout from './components/Layout';
 
 import Batch03Features from './pages/Batch03Features';
+import CustomViewsPage from './pages/CustomViewsPage';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -67,6 +68,7 @@ function App() {
           <Route path="/ai-geriatric-risk" element={<GeriatricRiskPage />} />
           <Route path="/ai-audit-summary" element={<AuditAISummaryPage />} />
           <Route path="/ai-clinical-trials" element={<ClinicalTrialMatchPage />} />
+          <Route path="/custom-views" element={<CustomViewsPage />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Layout>
