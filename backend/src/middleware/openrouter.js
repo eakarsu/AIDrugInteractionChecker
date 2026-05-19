@@ -1,9 +1,11 @@
 const https = require('https');
 require('dotenv').config({ path: require('path').resolve(__dirname, '../../../.env') });
 
+const { parseAIJson } = require('./parseAIJson');
+
 async function queryOpenRouter(prompt, systemPrompt = '') {
   const apiKey = process.env.OPENROUTER_API_KEY;
-  const model = process.env.OPENROUTER_MODEL || 'anthropic/claude-haiku-4.5';
+  const model = process.env.OPENROUTER_MODEL || 'anthropic/claude-3-5-sonnet-20241022';
 
   if (!apiKey || apiKey === 'your-openrouter-key-here') {
     return { error: false, result: generateMockResponse(prompt) };
@@ -200,4 +202,11 @@ Based on the provided information, here is a comprehensive analysis:
 *This analysis is for clinical decision support only. Professional clinical judgment should guide all treatment decisions.*`;
 }
 
-module.exports = { queryOpenRouter };
+// Helper that calls OpenRouter then attempts JSON parse with 3-strategy fallback.
+// Returns { error, result, json } where json is the parsed object or null.
+async function queryOpenRouterJson(prompt, systemPrompt = '') {
+  const out = await queryOpenRouter(prompt, systemPrompt);
+  return { ...out, json: out.error ? null : parseAIJson(out.result) };
+}
+
+module.exports = { queryOpenRouter, queryOpenRouterJson, parseAIJson };
