@@ -21,10 +21,16 @@ import MultiInteractionPage from './pages/MultiInteractionPage';
 import GeriatricRiskPage from './pages/GeriatricRiskPage';
 import AuditAISummaryPage from './pages/AuditAISummaryPage';
 import ClinicalTrialMatchPage from './pages/ClinicalTrialMatchPage';
+import RenalDoseReview from './pages/RenalDoseReview';
 import Layout from './components/Layout';
 
 import Batch03Features from './pages/Batch03Features';
 import CustomViewsPage from './pages/CustomViewsPage';
+
+import CodexCustomVizFeature from './pages/CodexCustomVizFeature';
+import CodexOperationsFeature from './pages/CodexOperationsFeature';
+
+import TimelineView from './pages/TimelineView';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -47,6 +53,10 @@ function App() {
     <Router>
       <Layout onLogout={handleLogout}>
         <Routes>
+        <Route path="/insights/timeline" element={<TimelineView />} />
+        <Route path="/codex/custom-viz" element={<CodexCustomVizFeature />} />
+        <Route path="/codex/operations" element={<CodexOperationsFeature />} />
+
           <Route path="/batch03" element={<Batch03Features />} />
           <Route path="/" element={<Dashboard />} />
           <Route path="/drugs" element={<DrugsPage />} />
@@ -54,6 +64,7 @@ function App() {
           <Route path="/patients" element={<PatientsPage />} />
           <Route path="/adverse-reactions" element={<AdverseReactionsPage />} />
           <Route path="/dosage" element={<DosagePage />} />
+          <Route path="/renal-dose-review" element={<RenalDoseReview />} />
           <Route path="/alternatives" element={<AlternativesPage />} />
           <Route path="/allergies" element={<AllergiesPage />} />
           <Route path="/contraindications" element={<ContraindicationsPage />} />

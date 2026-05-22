@@ -51,6 +51,7 @@ app.use('/api/voice-intake', require('./routes/voiceIntake'));
 app.use('/api/pharmacy-integration', require('./routes/pharmacyIntegration'));
 app.use('/api/formulary-check', require('./routes/formularyCheck'));
 app.use('/api/population-health', require('./routes/populationHealth'));
+app.use('/api/renal-dose-review', require('./routes/renalDoseReview'));
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));

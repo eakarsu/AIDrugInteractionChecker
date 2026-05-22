@@ -8,6 +8,7 @@ const menuItems = [
   { path: '/patients', label: 'Patients', icon: '♥' },
   { path: '/adverse-reactions', label: 'Adverse Reactions', icon: '⚠' },
   { path: '/dosage', label: 'Dosage Calculator', icon: '⊕' },
+  { path: '/renal-dose-review', label: 'Renal Dose Review', icon: '◌' },
   { path: '/alternatives', label: 'Drug Alternatives', icon: '↔' },
   { path: '/allergies', label: 'Allergy Checker', icon: '✦' },
   { path: '/contraindications', label: 'Contraindications', icon: '⊘' },

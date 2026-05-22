@@ -317,9 +317,9 @@ router.post('/interactions/ai-multi-check', auth, aiRateLimiter, async (req, res
     }
 
     const interactionsResult = await pool.query(
-      `SELECT drug_a_id, drug_b_id, severity, mechanism, management
-         FROM interactions
-        WHERE drug_a_id = ANY($1::int[]) AND drug_b_id = ANY($1::int[])`,
+      `SELECT drug1_id AS drug_a_id, drug2_id AS drug_b_id, severity, description AS mechanism, management
+         FROM drug_interactions
+        WHERE drug1_id = ANY($1::int[]) AND drug2_id = ANY($1::int[])`,
       [drug_ids]
     );
 
