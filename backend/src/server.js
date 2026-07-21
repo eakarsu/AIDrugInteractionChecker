@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') });
+const { validateRuntime } = require('./config/runtime');
+
+validateRuntime();
 
 const app = express();
 const PORT = process.env.BACKEND_PORT || 4000;
@@ -26,6 +29,11 @@ app.use(express.json({ limit: '1mb' }));
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/evidence-review', require('./routes/evidenceReview'));
+
+// The generated CRUD/model endpoints are not tenant-isolated or clinically
+// validated. They remain available only for explicit local prototype study.
+if (process.env.ENABLE_LEGACY_CLINICAL_SURFACES === 'true' && process.env.NODE_ENV !== 'production') {
 app.use('/api/drugs', require('./routes/drugs'));
 app.use('/api/interactions', require('./routes/interactions'));
 app.use('/api/patients', require('./routes/patients'));
@@ -52,12 +60,13 @@ app.use('/api/pharmacy-integration', require('./routes/pharmacyIntegration'));
 app.use('/api/formulary-check', require('./routes/formularyCheck'));
 app.use('/api/population-health', require('./routes/populationHealth'));
 app.use('/api/renal-dose-review', require('./routes/renalDoseReview'));
+}
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
 
 // === Custom Pharmacy Views (mounted BEFORE 404) ===
-try {
+if (process.env.ENABLE_LEGACY_CLINICAL_SURFACES === 'true' && process.env.NODE_ENV !== 'production') try {
   const _customViews = require('../routes/customViews');
   app.use('/api/custom-views', _customViews);
   console.log('[custom-views] mounted at /api/custom-views');
@@ -66,7 +75,7 @@ try {
 }
 
 // === Batch 03 Gaps & Frontend Mounts ===
-try {
+if (process.env.ENABLE_LEGACY_CLINICAL_SURFACES === 'true' && process.env.NODE_ENV !== 'production') try {
   const _batch03 = require('../routes/batch03Gaps');
   if (typeof authenticateToken === 'function') app.use('/api', authenticateToken, _batch03);
   else app.use('/api', _batch03);

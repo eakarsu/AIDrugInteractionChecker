@@ -1,0 +1,7 @@
+# Evidence-review operations and clinical boundary
+
+Run `scripts/bootstrap.sh`, configure `.env`, and apply `scripts/migrate.sh`. The start path never installs, creates or seeds a database, migrates schema, starts PostgreSQL, or kills ports. It stops only its own child PIDs. The destructive legacy seed requires `CONFIRM_DEMO_SEED=yes` and is strictly non-clinical.
+
+`/api/evidence-review` is the supported boundary. It creates role-controlled clinical workspaces, ingests versioned and independently reviewed evidence with terminology codes and source hashes, pseudonymizes external patient references, records consent, evaluates medication pairs deterministically, exposes evidence gaps, and requires pharmacist/clinician review with rationale. Public registration grants only `viewer`. Generated patient CRUD and model-driven clinical endpoints are quarantined by default and forbidden in production.
+
+This is evidence-retrieval workflow software—not a prescribing, diagnosis, contraindication, dosing, or autonomous clinical decision system. No curated evidence is bundled, and no correctness or subgroup-performance claim is made. FHIR/EHR, terminology, knowledge-base, trial registry, pharmacy, and identity connectors remain disabled until contracts, credentials, conformance tests, reconciliation, consent, minimum-necessary scopes, and security review are complete. Expert-reviewed reference cases, adverse-event analysis, accessibility, latency, downtime, version rollback, and regulated validation remain launch blockers.

@@ -2,12 +2,16 @@ const { Pool } = require('pg');
 const bcrypt = require('bcryptjs');
 require('dotenv').config({ path: require('path').resolve(__dirname, '../../../.env') });
 
+if (process.env.CONFIRM_DEMO_SEED !== 'yes') {
+  throw new Error('Refusing destructive seed without CONFIRM_DEMO_SEED=yes');
+}
+
 const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
+  host: process.env.DB_HOST,
   port: process.env.DB_PORT || 5432,
-  database: process.env.DB_NAME || 'drug_interaction_checker',
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'postgres',
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
 });
 
 async function seed() {
