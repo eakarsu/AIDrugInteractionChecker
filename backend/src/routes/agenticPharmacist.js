@@ -42,7 +42,11 @@ router.post('/chat', auth, aiRateLimiter, async (req, res) => {
 
     let answer;
     try {
-      const raw = await queryOpenRouter(userMsg, system); // TODO: configure OPENROUTER_API_KEY
+      const aiResult = await queryOpenRouter(userMsg, system);
+      if (aiResult.error) {
+        return res.status(503).json({ error: 'LLM unavailable', detail: aiResult.result });
+      }
+      const raw = aiResult.result;
       try { answer = JSON.parse(raw.match(/\{[\s\S]*\}/)?.[0] || raw); } catch { answer = { answer: raw }; }
     } catch (e) {
       return res.status(503).json({ error: 'LLM unavailable', detail: e.message });
