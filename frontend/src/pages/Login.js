@@ -23,8 +23,8 @@ const Login = ({ onLogin }) => {
   };
 
   const populateCredentials = () => {
-    setEmail('sarah@hospital.com');
-    setPassword('password123');
+    setEmail(process.env.REACT_APP_DEMO_EMAIL || '');
+    setPassword(process.env.REACT_APP_DEMO_PASSWORD || '');
   };
 
   return (
