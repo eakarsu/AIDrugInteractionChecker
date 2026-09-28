@@ -75,7 +75,7 @@ const Login = ({ onLogin }) => {
           </button>
 
           <button type="button" onClick={populateCredentials} style={styles.demoBtn}>
-            Use Demo Credentials
+            Auto Fill Demo Credentials
           </button>
         </form>
 
