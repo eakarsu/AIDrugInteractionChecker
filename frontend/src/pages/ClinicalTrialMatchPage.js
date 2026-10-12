@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import api from '../services/api';
 import AIAnalysis from '../components/AIAnalysis';
+import JsonReport from '../components/JsonReport';
 import {
   FormInput,
   SubmitButton,
@@ -82,7 +83,7 @@ const ClinicalTrialMatchPage = () => {
       {aiJson && (
         <div style={{ ...styles.card, marginTop: 16 }}>
           <div style={styles.sectionLabel}>Structured Match JSON</div>
-          <pre style={styles.pre}>{JSON.stringify(aiJson, null, 2)}</pre>
+          <JsonReport data={aiJson} title="AI structured results" />
         </div>
       )}
     </div>

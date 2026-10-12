@@ -3,6 +3,7 @@ import api from '../services/api';
 import DataTable from '../components/DataTable';
 import Modal from '../components/Modal';
 import AIAnalysis from '../components/AIAnalysis';
+import FullFieldPresets from '../components/FullFieldPresets';
 import { FormInput, FormSelect, FormTextarea, SubmitButton, PageHeader, SeverityBadge } from '../components/FormField';
 
 const AlternativesPage = () => {
@@ -120,6 +121,7 @@ const AlternativesPage = () => {
 
       <Modal isOpen={showAISuggest} onClose={() => setShowAISuggest(false)} title="AI Suggest Alternatives" wide>
         <form onSubmit={runAISuggest}>
+          <FullFieldPresets value={aiForm} onChange={setAiForm} choices={{ drug_id: (typeof drugs !== 'undefined' ? drugs : []).map((d) => d.id) }} />
           <FormSelect label="Drug" value={aiForm.drug_id} onChange={(e) => setAiForm({ ...aiForm, drug_id: e.target.value })} options={drugs.map(d => ({ value: d.id, label: d.name || d.generic_name }))} required />
           <FormTextarea label="Reason for Alternative" value={aiForm.reason} onChange={(e) => setAiForm({ ...aiForm, reason: e.target.value })} placeholder="e.g., Cost, side effects, allergy..." />
           <SubmitButton loading={aiLoading}>Get AI Suggestions</SubmitButton>

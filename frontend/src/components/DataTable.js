@@ -1,7 +1,10 @@
 import React from 'react';
+import RecordDialog from './RecordDialog';
 
 const DataTable = ({ columns, data, onRowClick, onDelete, onEdit }) => {
+  const [detailRow, setDetailRow] = React.useState(null);
   return (
+    <>
     <div style={styles.wrapper}>
       <table style={styles.table}>
         <thead>
@@ -36,6 +39,9 @@ const DataTable = ({ columns, data, onRowClick, onDelete, onEdit }) => {
                 {(onDelete || onEdit) && (
                   <td style={{ ...styles.td, textAlign: 'center' }} onClick={e => e.stopPropagation()}>
                     <div style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
+                      <button onClick={() => setDetailRow(row)} style={styles.detailsBtn}>
+                        Details
+                      </button>
                       {onEdit && (
                         <button
                           onClick={() => onEdit(row)}
@@ -63,6 +69,17 @@ const DataTable = ({ columns, data, onRowClick, onDelete, onEdit }) => {
         </tbody>
       </table>
     </div>
+    {detailRow && (
+      <RecordDialog
+        title="Record details"
+        item={detailRow}
+        columns={columns}
+        onClose={() => setDetailRow(null)}
+        onEdit={onEdit ? (row) => { setDetailRow(null); onEdit(row); } : undefined}
+        onDelete={onDelete ? (row) => { setDetailRow(null); onDelete(row.id); } : undefined}
+      />
+    )}
+  </>
   );
 };
 
@@ -104,6 +121,17 @@ const styles = {
     padding: '40px',
     color: '#475569',
     fontSize: '14px',
+  },
+  detailsBtn: {
+    background: 'rgba(148, 163, 184, 0.1)',
+    border: '1px solid rgba(148, 163, 184, 0.35)',
+    borderRadius: '6px',
+    padding: '4px 12px',
+    color: '#cbd5e1',
+    fontSize: '12px',
+    cursor: 'pointer',
+    fontFamily: 'Inter, sans-serif',
+    fontWeight: '500',
   },
   editBtn: {
     background: 'rgba(59, 130, 246, 0.1)',

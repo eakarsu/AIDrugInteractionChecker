@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import AIAnalysis from '../components/AIAnalysis';
+import JsonReport from '../components/JsonReport';
 import {
   FormSelect,
   SubmitButton,
@@ -156,7 +157,7 @@ const GeriatricRiskPage = () => {
       {aiJson && (
         <div style={{ ...styles.card, marginTop: '16px' }}>
           <div style={styles.sectionLabel}>Structured JSON</div>
-          <pre style={styles.pre}>{JSON.stringify(aiJson, null, 2)}</pre>
+          <JsonReport data={aiJson} title="AI structured results" />
         </div>
       )}
     </div>

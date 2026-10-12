@@ -1,4 +1,5 @@
 import React from 'react';
+import JsonReport, { parseJsonValue } from './JsonReport';
 
 const AIAnalysis = ({ content, loading }) => {
   if (loading) {
@@ -25,6 +26,13 @@ const AIAnalysis = ({ content, loading }) => {
   }
 
   if (!content) return null;
+
+  // Structured AI payloads (objects, arrays or JSON strings) render through the
+  // shared professional JSON report instead of a raw text dump.
+  const parsed = parseJsonValue(content);
+  if (parsed !== undefined && typeof parsed === 'object') {
+    return <JsonReport data={parsed} title="AI Analysis" />;
+  }
 
   const renderMarkdown = (text) => {
     const lines = text.split('\n');

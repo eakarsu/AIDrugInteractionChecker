@@ -3,6 +3,7 @@ import api from '../services/api';
 import DataTable from '../components/DataTable';
 import Modal from '../components/Modal';
 import AIAnalysis from '../components/AIAnalysis';
+import FullFieldPresets from '../components/FullFieldPresets';
 import { FormInput, FormSelect, FormTextarea, SubmitButton, PageHeader, SeverityBadge } from '../components/FormField';
 
 const AllergiesPage = () => {
@@ -135,6 +136,7 @@ const AllergiesPage = () => {
 
       <Modal isOpen={showAICheck} onClose={() => setShowAICheck(false)} title="AI Cross-Reactivity Check" wide>
         <form onSubmit={runAICheck}>
+          <FullFieldPresets value={aiForm} onChange={setAiForm} choices={{ drug_id: (typeof drugs !== 'undefined' ? drugs : []).map((d) => d.id) }} />
           <FormSelect label="Drug" value={aiForm.drug_id} onChange={(e) => setAiForm({ ...aiForm, drug_id: e.target.value })} options={drugs.map(d => ({ value: d.id, label: d.name || d.generic_name }))} required />
           <FormSelect label="Patient" value={aiForm.patient_id} onChange={(e) => setAiForm({ ...aiForm, patient_id: e.target.value })} options={patients.map(p => ({ value: p.id, label: p.name || `${p.first_name || ''} ${p.last_name || ''}`.trim() }))} required />
           <SubmitButton loading={aiLoading}>Check Cross-Reactivity</SubmitButton>

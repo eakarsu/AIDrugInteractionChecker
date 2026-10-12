@@ -3,6 +3,7 @@ import api from '../services/api';
 import DataTable from '../components/DataTable';
 import Modal from '../components/Modal';
 import AIAnalysis from '../components/AIAnalysis';
+import FullFieldPresets from '../components/FullFieldPresets';
 import {
   FormInput,
   FormSelect,
@@ -361,6 +362,7 @@ const GeriatricPage = () => {
         wide
       >
         <form onSubmit={handleAIAssess}>
+          <FullFieldPresets value={aiForm} onChange={setAiForm} choices={{ drug_id: (typeof drugOptions !== 'undefined' ? drugOptions : []).map((o) => o.value) }} />
           <FormSelect
             label="Drug"
             name="drug_id"

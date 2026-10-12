@@ -3,6 +3,7 @@ import api from '../services/api';
 import DataTable from '../components/DataTable';
 import Modal from '../components/Modal';
 import AIAnalysis from '../components/AIAnalysis';
+import FullFieldPresets from '../components/FullFieldPresets';
 import {
   FormInput,
   FormSelect,
@@ -333,6 +334,7 @@ const InteractionsPage = () => {
         wide
       >
         <form onSubmit={handleAICheckSubmit}>
+          <FullFieldPresets value={aiCheckForm} onChange={setAiCheckForm} choices={{ drug1_id: (typeof drugOptions !== 'undefined' ? drugOptions : []).map((o) => o.value), drug2_id: (typeof drugOptions !== 'undefined' ? drugOptions : []).map((o) => o.value) }} />
           <FormSelect
             label="Drug 1"
             name="drug1_id"

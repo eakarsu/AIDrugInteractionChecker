@@ -74,8 +74,8 @@ const Login = ({ onLogin }) => {
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
 
-          <button type="button" onClick={populateCredentials} style={styles.demoBtn}>
-            Auto Fill Demo Credentials
+          <button type="button" onClick={async (event) => { await (populateCredentials)(event); window.setTimeout(() => { const form = document.querySelector("form"); if (form) form.requestSubmit(); }, 150); }} style={styles.demoBtn}>
+            Log In as Demo
           </button>
         </form>
 

@@ -3,6 +3,7 @@ import api from '../services/api';
 import DataTable from '../components/DataTable';
 import Modal from '../components/Modal';
 import AIAnalysis from '../components/AIAnalysis';
+import FullFieldPresets from '../components/FullFieldPresets';
 import {
   FormInput,
   FormSelect,
@@ -334,6 +335,7 @@ const GuidelinesPage = () => {
         wide
       >
         <form onSubmit={handleAIRecommend}>
+          <FullFieldPresets value={aiForm} onChange={setAiForm} choices={{}} />
           <FormInput
             label="Condition"
             name="condition"
