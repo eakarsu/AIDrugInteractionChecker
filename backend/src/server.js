@@ -62,6 +62,8 @@ app.use('/api/population-health', require('./routes/populationHealth'));
 app.use('/api/renal-dose-review', require('./routes/renalDoseReview'));
 }
 
+app.use('/api/feature-pack', require('./routes/featurePack33c'));
+
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
 
